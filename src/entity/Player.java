@@ -10,9 +10,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp;
-    KeyHandler keyH;
+    GamePanel gp; // Referecne to the main game panel
+    KeyHandler keyH; // Reference to the key input handler
 
+    // Initializes player settings and loads images
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -21,6 +22,7 @@ public class Player extends Entity {
         getPlayerImage();
     }
 
+    // Initial values for the player
     public void setDefaultValues(){
         x = 100;
         y = 100;
@@ -28,6 +30,7 @@ public class Player extends Entity {
         direction = "down";
     }
 
+    // Loads player sprites
     public void getPlayerImage(){
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
@@ -38,15 +41,13 @@ public class Player extends Entity {
             right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
             left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
             left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-
         } catch (IOException e){
             e.printStackTrace();
         }
-
     }
 
-
     public void update(){
+        // Checks if any movement key is being pressed
         if(keyH.upPressed == true || keyH.downPressed == true ||
            keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed){
@@ -66,15 +67,16 @@ public class Player extends Entity {
                 x -= speed;
             }
 
+            // This controls the animation frame switching
             spriteCounter ++;
             if(spriteCounter > 15){
                 if(spriteNum == 1){
-                    spriteNum = 2;
+                    spriteNum = 2; // Switch to 2nd sprite
                 }
                 else if(spriteNum == 2){
-                    spriteNum = 1;
+                    spriteNum = 1; // Switches back
                 }
-                spriteCounter = 0;
+                spriteCounter = 0; // Resets the counter
             }
         }
     }
@@ -83,7 +85,7 @@ public class Player extends Entity {
 //      g2.setColor(Color.blue);
 //      g2.fillRect(x,y,gp.tileSize,gp.tileSize);
 
-        BufferedImage image = null;
+        BufferedImage image = null; // Prepares the image to be rendered
 
         switch(direction){
             case "up":
@@ -119,7 +121,7 @@ public class Player extends Entity {
                 }
                 break;
         }
+        // Draw the selected image at the player's position with the correct size
         g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
     }
-
 }

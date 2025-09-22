@@ -23,7 +23,6 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     Player player = new Player(this, keyH);
 
-
     // Player default position
     int playerX = 100;
     int playerY = 100;
@@ -42,7 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this); // Instantiate new game loop thread
         gameThread.start(); // Start the game loop
     }
-
 
 //  @Override
 //  public void run() {

@@ -6,9 +6,10 @@ public class Entity {
     public int x, y;
     public int speed;
 
+    // Stores buffered images(sprites) to be rendered with ImageIO
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public String direction; // Actual movement direction
 
-    public int spriteCounter = 0;
-    public int spriteNum = 1;
+    public int spriteCounter = 0; // Counter that controls the animation timing
+    public int spriteNum = 1; // Counter that tracks which buffered sprites should be displayed
 }
