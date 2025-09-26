@@ -13,10 +13,16 @@ public class Player extends Entity {
     GamePanel gp; // Referecne to the main game panel
     KeyHandler keyH; // Reference to the key input handler
 
+    public final int screenX;
+    public final int screenY;
+
     // Initializes player settings and loads images
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         setDefaultValues();
         getPlayerImage();
@@ -24,8 +30,8 @@ public class Player extends Entity {
 
     // Initial values for the player
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 3;
         direction = "down";
     }
@@ -52,19 +58,19 @@ public class Player extends Entity {
            keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed){
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
             }
             else if(keyH.downPressed){
                 direction = "down";
-                y += speed;
+                worldY += speed;
             }
             else if(keyH.rightPressed){
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
             else if(keyH.leftPressed){
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             }
 
             // This controls the animation frame switching
@@ -122,6 +128,6 @@ public class Player extends Entity {
                 break;
         }
         // Draw the selected image at the player's position with the correct size
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
