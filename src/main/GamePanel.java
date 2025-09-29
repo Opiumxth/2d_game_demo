@@ -111,8 +111,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        tileM.draw(g2);
-        player.draw(g2);
+        tileM.draw(g2); // First the tiles are drawn
+        player.draw(g2); // Then the player for it to be above the tiiles
         // g2.dispose();
         Toolkit.getDefaultToolkit().sync();
     }

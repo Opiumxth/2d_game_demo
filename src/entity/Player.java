@@ -13,6 +13,7 @@ public class Player extends Entity {
     GamePanel gp; // Referecne to the main game panel
     KeyHandler keyH; // Reference to the key input handler
 
+    // Player's position
     public final int screenX;
     public final int screenY;
 
@@ -21,6 +22,7 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
+        // This centers the player on the screen
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
@@ -32,7 +34,7 @@ public class Player extends Entity {
     public void setDefaultValues(){
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-        speed = 3;
+        speed = 4;
         direction = "down";
     }
 

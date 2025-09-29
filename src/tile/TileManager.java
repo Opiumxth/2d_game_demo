@@ -10,18 +10,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class TileManager {
-    GamePanel gp;
-    Tile[] tile;
-    int mapTileNum[][];
+    GamePanel gp; // Reference to the main game panel
+    Tile[] tile; // Array of different tiles
+    int mapTileNum[][]; // This is a 2d array storing which tile goes at each map position
 
+    // THis constructor receives the game panel where tiles will be managed
     public TileManager(GamePanel gp){
         this.gp = gp;
-        tile = new Tile[10];
-        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
-        getTileImage();
-        loadMap("/maps/world01.txt");
+        tile = new Tile[10]; // This means it's up to 10 different types of tiles
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow]; // THis is the whole world map
+        getTileImage(); // Loafs the tile image
+        loadMap("/maps/world01.txt"); // Loads the map layout from a text file
     }
 
+    // Loads the image for each type of tile
     public void getTileImage(){
         try{
             tile[0] = new Tile();
@@ -45,7 +47,7 @@ public class TileManager {
             e.printStackTrace();
         }
     }
-
+    // Load the map layout from a text file and store it in mapTileNum
     public void loadMap(String filePath){
         try{
             InputStream is = getClass().getResourceAsStream(filePath);
@@ -53,14 +55,18 @@ public class TileManager {
 
             int col = 0;
             int row = 0;
+
+            // Go through each row and column of the map file
             while(col < gp.maxWorldCol && row < gp.maxWorldRow){
-                String line = br.readLine();
+                String line = br.readLine(); // Read one line of the map file
                 while(col < gp.maxWorldCol){
-                    String numbers[] = line.split(" ");
-                    int num = Integer.parseInt(numbers[col]);
-                    mapTileNum[col][row] = num;
+                    String numbers[] = line.split(" "); // Split line into numbers
+                    int num = Integer.parseInt(numbers[col]); // Convert string to int
+                    mapTileNum[col][row] = num; // Store tile number in the map array
                     col++;
                 }
+
+                // If we reach the end of the row, reset column and move to next row
                 if(col == gp.maxWorldCol){
                     col = 0;
                     row++;
@@ -70,14 +76,14 @@ public class TileManager {
         }catch(Exception e){
             e.printStackTrace();
         }
-
-
     }
 
+    // Draw the tiles on the screen (only the ones visible to the player)
     public void draw(Graphics2D g2){
         int worldCol = 0;
         int worldRow = 0;
 
+        // Loop through the entire world map
         while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
             int tileNum = mapTileNum[worldCol][worldRow];
             int worldX = worldCol * gp.tileSize;
@@ -92,13 +98,11 @@ public class TileManager {
                 g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
             worldCol++;
+            // If we reach the end of a row, reset col and move to next row
             if(worldCol == gp.maxWorldCol){
                 worldCol = 0;
                 worldRow++;
             }
         }
-
-
     }
-
 }
