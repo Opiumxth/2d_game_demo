@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Entity {
@@ -12,4 +13,7 @@ public class Entity {
 
     public int spriteCounter = 0; // Counter that controls the animation timing
     public int spriteNum = 1; // Counter that tracks which buffered sprites should be displayed
+
+    public Rectangle solidArea; // This will be the collisionArea for any entity
+    public boolean collisionOn = false; // This indicates if the entity is colliding with another tile
 }

@@ -26,6 +26,8 @@ public class Player extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
+        solidArea = new Rectangle(8, 16, 32, 32); // Instantiating the collision rectangle
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -60,19 +62,29 @@ public class Player extends Entity {
            keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed){
                 direction = "up";
-                worldY -= speed;
             }
             else if(keyH.downPressed){
                 direction = "down";
-                worldY += speed;
             }
             else if(keyH.rightPressed){
                 direction = "right";
-                worldX += speed;
             }
             else if(keyH.leftPressed){
                 direction = "left";
-                worldX -= speed;
+            }
+
+            // CHeck tile collision
+            collisionOn = false;
+            gp.cChecker.checkTile(this); // Even tho we're in the PLayer class, we can pass "this" as an Entity argument cause Player inherits from Entity
+
+            // "If collision is false, Player can move"
+            if (collisionOn == false){
+                switch (direction) {
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
+                }
             }
 
             // This controls the animation frame switching
