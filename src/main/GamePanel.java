@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import java.awt.*; // Importing java AWT (Abstract Window Toolkit), this provides GUI and graphics classes
@@ -30,7 +31,9 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(); // Read the keyboard input
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this); // Instantiate th eAssetSetter to place objects in the game
     public Player player = new Player(this, keyH);
+    public SuperObject obj[] = new SuperObject[10]; // This means that only 10 objects can be displayed at the same time
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // SEting the gamePanel size
@@ -38,6 +41,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // These allow multi buffering, in this case using two buffers
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame(){
+        aSetter.setObject();
     }
 
     public void startGameThread() {
@@ -113,6 +120,12 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2); // First the tiles are drawn
+        // Loop through object array and draw the non-null ones
+        for(int i = 0; i < obj.length; i++){
+            if(obj[i] != null){
+                obj[i].draw(g2,this);
+            }
+        }
         player.draw(g2); // Then the player for it to be above the tiiles
         // g2.dispose();
         Toolkit.getDefaultToolkit().sync();
