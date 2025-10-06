@@ -15,5 +15,8 @@ public class Entity {
     public int spriteNum = 1; // Counter that tracks which buffered sprites should be displayed
 
     public Rectangle solidArea; // This will be the collisionArea for any entity
+
+    public int solidAreaDefaultX, solidAreaDefaultY;
+
     public boolean collisionOn = false; // This indicates if the entity is colliding with another tile
 }

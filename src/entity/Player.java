@@ -17,6 +17,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    int hasKey = 0;
+
     // Initializes player settings and loads images
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -26,7 +28,13 @@ public class Player extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solidArea = new Rectangle(8, 16, 32, 32); // Instantiating the collision rectangle
+        solidArea = new Rectangle(); // Instantiating the collision rectangle
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 32;
+        solidArea.height = 32;
 
         setDefaultValues();
         getPlayerImage();
@@ -77,6 +85,9 @@ public class Player extends Entity {
             collisionOn = false;
             gp.cChecker.checkTile(this); // Even tho we're in the PLayer class, we can pass "this" as an Entity argument cause Player inherits from Entity
 
+            int objIndex = gp.cChecker.checkObject(this,true);
+            pickUpObject(objIndex);
+
             // "If collision is false, Player can move"
             if (collisionOn == false){
                 switch (direction) {
@@ -97,6 +108,27 @@ public class Player extends Entity {
                     spriteNum = 1; // Switches back
                 }
                 spriteCounter = 0; // Resets the counter
+            }
+        }
+    }
+
+    public void pickUpObject(int i){
+        if(i != 999){
+            String objectName = gp.obj[i].name;
+            switch (objectName){
+                case "Key":
+                    hasKey++;
+                    gp.obj[i] = null;
+                    System.out.println("Keys: " + hasKey);
+                    break;
+                case "Door":
+                    if(hasKey > 0){
+                        gp.obj[i] = null;
+                        hasKey--;
+                    }
+                    System.out.println("Keys: " + hasKey);
+                    break;
+
             }
         }
     }

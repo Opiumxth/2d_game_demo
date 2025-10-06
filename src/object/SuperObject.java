@@ -10,6 +10,9 @@ public class SuperObject {
     public String name; // Object's name
     public boolean collision = false;
     public int worldX, worldY; // Object position in the whole game world
+    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public int solidAreaDefaultX = 0;
+    public int solidAreaDefaultY = 0;
 
     // Draws the object on screen only if it's in the visible range
     public void draw(Graphics2D g2, GamePanel gp){
