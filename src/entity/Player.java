@@ -17,7 +17,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
-    int hasKey = 0;
+    public int hasKey = 0;
 
     // Initializes player settings and loads images
     public Player(GamePanel gp, KeyHandler keyH){
@@ -34,7 +34,7 @@ public class Player extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.height = 30;
 
         setDefaultValues();
         getPlayerImage();
@@ -128,7 +128,10 @@ public class Player extends Entity {
                     }
                     System.out.println("Keys: " + hasKey);
                     break;
-
+                case "Boots":
+                    speed += 2;
+                    gp.obj[i] = null;
+                    break;
             }
         }
     }

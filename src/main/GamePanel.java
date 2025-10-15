@@ -32,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this); // Instantiate th eAssetSetter to place objects in the game
+    public UI ui = new UI(this);
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10]; // This means that only 10 objects can be displayed at the same time
 
@@ -127,7 +128,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         player.draw(g2); // Then the player for it to be above the tiiles
-        // g2.dispose();
+        ui.draw(g2);
+
+        g2.dispose();
         Toolkit.getDefaultToolkit().sync();
     }
 }
