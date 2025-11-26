@@ -14,3 +14,6 @@ out/
 out/
 *.iml
 Thumbs.db
+
+# Archivo de guardado
+savegame.dat

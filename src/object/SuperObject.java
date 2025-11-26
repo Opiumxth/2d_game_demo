@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 public class SuperObject implements Drawable, java.io.Serializable {
     private static final long serialVersionUID = 1L;
-    public transient BufferedImage image;  // NO serializar la imagen
+    public transient BufferedImage image;  // NO serializa la imagen
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
