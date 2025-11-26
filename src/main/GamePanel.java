@@ -4,6 +4,8 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.*; // Importing java AWT (Abstract Window Toolkit), this provides GUI and graphics classes
 import javax.swing.JPanel;
 
@@ -35,17 +37,20 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10]; // This means that only 10 objects can be displayed at the same time
+    public entity.Entity npc[] = new entity.Entity[1]; // o el número que quieras
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // SEting the gamePanel size
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); // These allow multi buffering, in this case using two buffers
         this.addKeyListener(keyH);
+        this.addMouseListener(new MouseHandler(this));
         this.setFocusable(true);
     }
 
     public void setupGame(){
         aSetter.setObject();
+        aSetter.setNPC();
     }
 
     public void startGameThread() {
@@ -114,6 +119,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update(){
         player.update();
+        for(int i = 0; i < npc.length; i++){
+            if(npc[i] != null){
+                npc[i].update();   // ← Llama al update del enemigo
+            }
+        }
     }
 
     @Override
@@ -127,6 +137,14 @@ public class GamePanel extends JPanel implements Runnable {
                 obj[i].draw(g2,this);
             }
         }
+
+        // NPC
+        for(int i = 0; i < npc.length; i++){
+            if(npc[i] != null){
+                npc[i].draw(g2);
+            }
+        }
+
         player.draw(g2); // Then the player for it to be above the tiiles
         ui.draw(g2);
 

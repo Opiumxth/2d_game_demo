@@ -1,9 +1,11 @@
 package main;
 
+import entity.Enemy;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Key;
+import object.OBJ_SpecialKey;
 
 // This class is responsible for placing objects ont he game map
 public class AssetSetter {
@@ -46,5 +48,12 @@ public class AssetSetter {
         gp.obj[7] = new OBJ_Boots();
         gp.obj[7].worldX = 37 * gp.tileSize;
         gp.obj[7].worldY = 42 * gp.tileSize;
+
+        gp.obj[8] = new OBJ_SpecialKey();
+        gp.obj[8].worldX = 11 * gp.tileSize;
+        gp.obj[8].worldY = 34 * gp.tileSize;
+    }
+    public void setNPC() {
+        gp.npc[0] = new Enemy(gp);  // Aquí instancias tu enemigo
     }
 }

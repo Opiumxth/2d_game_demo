@@ -3,6 +3,11 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 
+import object.OBJ_Chest;
+import object.SuperObject;
+import util.Inventory;
+
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +23,7 @@ public class Player extends Entity {
     public final int screenY;
 
     public int hasKey = 0;
+    public int specialKey = 0;
 
     // Initializes player settings and loads images
     public Player(GamePanel gp, KeyHandler keyH){
@@ -112,6 +118,8 @@ public class Player extends Entity {
         }
     }
 
+    public Inventory<SuperObject> inventory = new Inventory<>();
+
     public void pickUpObject(int i){
         if(i != 999){
             String objectName = gp.obj[i].name;
@@ -121,6 +129,11 @@ public class Player extends Entity {
                     gp.obj[i] = null;
                     System.out.println("Keys: " + hasKey);
                     break;
+                case "SpecialKey":
+                    specialKey++;
+                    gp.obj[i] = null;
+                    System.out.println("Obtuviste la llave especial! Ya puedes abrir el cofre");
+                    break;
                 case "Door":
                     if(hasKey > 0){
                         gp.obj[i] = null;
@@ -129,10 +142,40 @@ public class Player extends Entity {
                     System.out.println("Keys: " + hasKey);
                     break;
                 case "Boots":
-                    speed += 2;
-                    gp.obj[i] = null;
+                    inventory.add(gp.obj[i]);   // Guarda las botas en inventario
+                    gp.obj[i] = null;           // Desaparecen del mapa
+                    gp.ui.showMessage("Botas añadidas al inventario");
+                    break;
+                case "Chest":
+                    OBJ_Chest chest = (OBJ_Chest) gp.obj[i];
+                    if(chest.opened) {
+                        // ✅ Ya está abierto → No hacer nada
+                        break;
+                    }
+                    if(gp.player.specialKey > 0) {
+                        chest.open();
+                        gp.player.specialKey--;
+                        gp.ui.showMessage("¡Has ganado!");
+                    }
+                    else {
+                        gp.ui.showMessage("Necesitas una llave especial");
+                    }
                     break;
             }
+        }
+    }
+
+    public boolean bootsEquipped = false;
+
+    public void equipBoots() {
+        if(!bootsEquipped){
+            speed += 2;       // activar velocidad
+            bootsEquipped = true;
+            gp.ui.showMessage("¡Botas equipadas!");
+        } else {
+            speed -= 2;       // desactivar velocidad (si quieres permitir quitar)
+            bootsEquipped = false;
+            gp.ui.showMessage("Botas desequipadas");
         }
     }
 
