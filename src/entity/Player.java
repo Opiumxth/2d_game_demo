@@ -7,34 +7,32 @@ import object.OBJ_Chest;
 import object.SuperObject;
 import util.Inventory;
 
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp; // Referecne to the main game panel
-    KeyHandler keyH; // Reference to the key input handler
+    GamePanel gp;
+    KeyHandler keyH;
 
-    // Player's position
     public final int screenX;
     public final int screenY;
 
     public int hasKey = 0;
     public int specialKey = 0;
 
-    // Initializes player settings and loads images
+    public Inventory<SuperObject> inventory = new Inventory<>();
+    public boolean bootsEquipped = false;
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
 
-        // This centers the player on the screen
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solidArea = new Rectangle(); // Instantiating the collision rectangle
+        solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
@@ -46,7 +44,6 @@ public class Player extends Entity {
         getPlayerImage();
     }
 
-    // Initial values for the player
     public void setDefaultValues(){
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
@@ -54,7 +51,6 @@ public class Player extends Entity {
         direction = "down";
     }
 
-    // Loads player sprites
     public void getPlayerImage(){
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
@@ -70,10 +66,34 @@ public class Player extends Entity {
         }
     }
 
+    // ============================================
+    // IMPLEMENTACIÓN DE move() DE MOVABLE
+    // ============================================
+    @Override
+    public void move() {
+        // Check tile collision
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+
+        int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+
+        // "If collision is false, Player can move"
+        if (collisionOn == false){
+            switch (direction) {
+                case "up" -> worldY -= speed;
+                case "down" -> worldY += speed;
+                case "left" -> worldX -= speed;
+                case "right" -> worldX += speed;
+            }
+        }
+    }
+
     public void update(){
         // Checks if any movement key is being pressed
         if(keyH.upPressed == true || keyH.downPressed == true ||
-           keyH.leftPressed == true || keyH.rightPressed == true){
+                keyH.leftPressed == true || keyH.rightPressed == true){
+
             if(keyH.upPressed){
                 direction = "up";
             }
@@ -87,38 +107,22 @@ public class Player extends Entity {
                 direction = "left";
             }
 
-            // CHeck tile collision
-            collisionOn = false;
-            gp.cChecker.checkTile(this); // Even tho we're in the PLayer class, we can pass "this" as an Entity argument cause Player inherits from Entity
-
-            int objIndex = gp.cChecker.checkObject(this,true);
-            pickUpObject(objIndex);
-
-            // "If collision is false, Player can move"
-            if (collisionOn == false){
-                switch (direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
+            // Llamar al método move() de la interfaz
+            move();
 
             // This controls the animation frame switching
             spriteCounter ++;
             if(spriteCounter > 15){
                 if(spriteNum == 1){
-                    spriteNum = 2; // Switch to 2nd sprite
+                    spriteNum = 2;
                 }
                 else if(spriteNum == 2){
-                    spriteNum = 1; // Switches back
+                    spriteNum = 1;
                 }
-                spriteCounter = 0; // Resets the counter
+                spriteCounter = 0;
             }
         }
     }
-
-    public Inventory<SuperObject> inventory = new Inventory<>();
 
     public void pickUpObject(int i){
         if(i != 999){
@@ -142,14 +146,13 @@ public class Player extends Entity {
                     System.out.println("Keys: " + hasKey);
                     break;
                 case "Boots":
-                    inventory.add(gp.obj[i]);   // Guarda las botas en inventario
-                    gp.obj[i] = null;           // Desaparecen del mapa
+                    inventory.add(gp.obj[i]);
+                    gp.obj[i] = null;
                     gp.ui.showMessage("Botas añadidas al inventario");
                     break;
                 case "Chest":
                     OBJ_Chest chest = (OBJ_Chest) gp.obj[i];
                     if(chest.opened) {
-                        // ✅ Ya está abierto → No hacer nada
                         break;
                     }
                     if(gp.player.specialKey > 0) {
@@ -165,25 +168,21 @@ public class Player extends Entity {
         }
     }
 
-    public boolean bootsEquipped = false;
-
     public void equipBoots() {
         if(!bootsEquipped){
-            speed += 2;       // activar velocidad
+            speed += 2;
             bootsEquipped = true;
             gp.ui.showMessage("¡Botas equipadas!");
         } else {
-            speed -= 2;       // desactivar velocidad (si quieres permitir quitar)
+            speed -= 2;
             bootsEquipped = false;
             gp.ui.showMessage("Botas desequipadas");
         }
     }
 
+    @Override
     public void draw(Graphics2D g2){
-//      g2.setColor(Color.blue);
-//      g2.fillRect(x,y,gp.tileSize,gp.tileSize);
-
-        BufferedImage image = null; // Prepares the image to be rendered
+        BufferedImage image = null;
 
         switch(direction){
             case "up":
@@ -219,7 +218,6 @@ public class Player extends Entity {
                 }
                 break;
         }
-        // Draw the selected image at the player's position with the correct size
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }

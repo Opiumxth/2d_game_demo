@@ -7,6 +7,7 @@ import tile.TileManager;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.*; // Importing java AWT (Abstract Window Toolkit), this provides GUI and graphics classes
+import java.io.IOException;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -121,8 +122,40 @@ public class GamePanel extends JPanel implements Runnable {
         player.update();
         for(int i = 0; i < npc.length; i++){
             if(npc[i] != null){
-                npc[i].update();   // ← Llama al update del enemigo
+                npc[i].update();
             }
+        }
+
+        // ============================================
+        // SISTEMA DE GUARDADO (Tecla G)
+        // ============================================
+        if(keyH.savePressed) {
+            try {
+                util.SaveLoadManager.saveGame(this);
+                ui.showMessage("¡Partida guardada!");
+            } catch (IOException e) {
+                ui.showMessage("Error al guardar");
+                e.printStackTrace();
+            }
+            keyH.savePressed = false;  // Resetear la tecla
+        }
+
+        // ============================================
+        // SISTEMA DE CARGA (Tecla L)
+        // ============================================
+        if(keyH.loadPressed) {
+            if(util.SaveLoadManager.saveFileExists()) {
+                try {
+                    util.SaveLoadManager.loadGame(this);
+                    ui.showMessage("¡Partida cargada!");
+                } catch (IOException | ClassNotFoundException e) {
+                    ui.showMessage("Error al cargar");
+                    e.printStackTrace();
+                }
+            } else {
+                ui.showMessage("No hay partida guardada");
+            }
+            keyH.loadPressed = false;  // Resetear la tecla
         }
     }
 

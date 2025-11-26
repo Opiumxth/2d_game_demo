@@ -4,9 +4,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean inventoryPressed;
+    public boolean savePressed;   // ← NUEVO
+    public boolean loadPressed;   // ← NUEVO
 
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -29,6 +30,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_I) {
             inventoryPressed = !inventoryPressed;
+        }
+        if (code == KeyEvent.VK_G) {
+            savePressed = true;
+        }
+        if (code == KeyEvent.VK_L) {
+            loadPressed = true;
         }
     }
 

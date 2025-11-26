@@ -3,7 +3,8 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory<T> {
+public class Inventory<T> implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     private List<T> items;
     public Inventory() {
         items = new ArrayList<>();

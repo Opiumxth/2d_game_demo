@@ -71,6 +71,12 @@ public class UI {
                 messageCounter = 0;
             }
         }
+        g2.setFont(g2.getFont().deriveFont(16f));
+        g2.setColor(Color.WHITE);
+        String controls = "G: Guardar | L: Cargar";
+        int controlX = gp.screenWidth / 2 - 90;
+        int controlY = gp.screenHeight - 20;
+        g2.drawString(controls, controlX, controlY);
     }
 
     public void drawInventoryMenu(Graphics2D g2) {
